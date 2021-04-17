@@ -1,5 +1,5 @@
 {
-  "name": "react-native-rn-super-range-slider",
+  "name": "react-native-super-range-slider",
   "version": "0.1.0",
   "description": "Range Slider",
   "main": "lib/commonjs/index",
@@ -13,7 +13,7 @@
     "android",
     "ios",
     "cpp",
-    "react-native-rn-super-range-slider.podspec",
+    "react-native-super-range-slider.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/giacomete-nuvem/react-native-rn-super-range-slider",
-  "author": "Roberto <roberto.giacomette@nuvem.net> (https://github.com/giacomete-nuvem)",
+  "repository": "https://github.com/giacomete/react-native-super-range-slider",
+  "author": "Roberto <roberto.giacomette18@gmail.com> (https://github.com/giacomete)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/giacomete-nuvem/react-native-rn-super-range-slider/issues"
+    "url": "https://github.com/giacomete/react-native-super-range-slider/issues"
   },
-  "homepage": "https://github.com/giacomete-nuvem/react-native-rn-super-range-slider#readme",
+  "homepage": "https://github.com/giacomete/react-native-super-range-slider#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
