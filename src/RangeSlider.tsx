@@ -75,7 +75,7 @@ export default function RangeSlider({
     },
   });
 
-  const containerSlides: any = [
+  const containerStyle: any[] = [
     styles.container,
     {
       height: heightBar,
@@ -85,13 +85,13 @@ export default function RangeSlider({
   ];
 
   if (typeof renderBar === 'function') {
-    containerSlides.push({ backgroundColor: 'transparent' });
+    containerStyle.push({ backgroundColor: 'transparent' });
   }
 
   return (
     <>
       <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
-        <View style={containerSlides}>
+        <View style={containerStyle}>
           {typeof renderBar === 'function' ? renderBar({ screenWidth }) : null}
         </View>
 
