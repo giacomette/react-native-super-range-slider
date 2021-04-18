@@ -1,19 +1,43 @@
 import * as React from 'react';
 
-import { StyleSheet, TextInput, View } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import { RangeSlider } from 'react-native-super-range-slider';
+
+const barImg = require('./assets/bar.png');
 
 export default function App() {
   const [value, setValue] = React.useState<number[]>([0, 50]);
 
   return (
     <View style={styles.container}>
+      <Text>Basico</Text>
+
       <RangeSlider
         value={value}
         onChange={(v: number[]) => {
-          console.log('v', v);
           setValue(v);
         }}
+      />
+
+      <View style={styles.h} />
+
+      <Text>Custon render bar</Text>
+
+      <RangeSlider
+        value={value}
+        onChange={(v: number[]) => {
+          setValue(v);
+        }}
+        renderBar={({ screenWidth }) => (
+          <Image
+            source={barImg}
+            resizeMode="contain"
+            style={{
+              width: screenWidth,
+              ...styles.imgBar,
+            }}
+          />
+        )}
       />
 
       <View style={styles.h} />
@@ -38,6 +62,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  imgBar: {
+    height: 10,
+  },
   input: {
     backgroundColor: 'gray',
     marginTop: 8,

@@ -1,11 +1,18 @@
 import { useCallback } from 'react';
 
 export interface RangeSliderProps {
+  endX: number;
+  beginX: number;
   dotSize: number;
   screenWidth: number;
 }
 
-export function useRangeSlider({ dotSize, screenWidth }: RangeSliderProps) {
+export function useRangeSlider({
+  dotSize,
+  screenWidth,
+  beginX,
+  endX,
+}: RangeSliderProps) {
   const validadeLimit = useCallback(
     (x) => {
       if (x <= 0) {
@@ -21,8 +28,8 @@ export function useRangeSlider({ dotSize, screenWidth }: RangeSliderProps) {
     [dotSize, screenWidth]
   );
 
-  const validadeBegin = useCallback(
-    (beginX, moveX, endX) => {
+  const getBeginValue = useCallback(
+    (moveX) => {
       let newValue = validadeLimit(beginX + moveX);
 
       if (newValue + dotSize >= endX) {
@@ -31,11 +38,11 @@ export function useRangeSlider({ dotSize, screenWidth }: RangeSliderProps) {
 
       return newValue;
     },
-    [dotSize, validadeLimit]
+    [beginX, dotSize, endX, validadeLimit]
   );
 
-  const validadeEnd = useCallback(
-    (beginX, moveX, endX) => {
+  const getEndValue = useCallback(
+    (moveX) => {
       let newValue = validadeLimit(endX + moveX);
 
       if (beginX + dotSize >= newValue) {
@@ -44,11 +51,11 @@ export function useRangeSlider({ dotSize, screenWidth }: RangeSliderProps) {
 
       return newValue;
     },
-    [dotSize, validadeLimit]
+    [beginX, dotSize, endX, validadeLimit]
   );
 
   return {
-    validadeBegin,
-    validadeEnd,
+    getBeginValue,
+    getEndValue,
   };
 }

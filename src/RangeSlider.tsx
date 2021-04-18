@@ -2,20 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Animated, PanResponder } from 'react-native';
 import { useRangeSlider } from './hooks';
 
-let beginX = 0;
-let endX = 0;
-
-interface SliderProps {
+interface RangeSliderProps {
   value: number[];
-  onChange: any;
+  onChange: (value: number[], x?: number, y?: number) => void;
   step?: number;
   min?: number;
   max?: number;
   heightBar?: number;
   dotSize?: number;
+  renderBar?: ({ screenWidth }: { screenWidth: number }) => JSX.Element;
 }
 
-export default function Slider({
+export default function RangeSlider({
   value,
   onChange,
   step = 1,
@@ -23,21 +21,27 @@ export default function Slider({
   max = 100,
   heightBar = 10,
   dotSize = 35,
-}: SliderProps) {
+  renderBar,
+}: RangeSliderProps) {
   console.log(step, min, max);
 
+  const [beginX, setBeginX] = useState(0);
+  const [endX, setEndX] = useState(0);
   const [screenWidth, setScreenWidth] = useState(0);
+
   const xSlideBegin = useRef(new Animated.Value(value[0])).current;
   const xSlideEnd = useRef(new Animated.Value(value[1])).current;
 
-  const { validadeBegin, validadeEnd } = useRangeSlider({
+  const { getBeginValue, getEndValue } = useRangeSlider({
     dotSize,
     screenWidth,
+    beginX,
+    endX,
   });
 
   useEffect(() => {
-    beginX = value[0];
-    endX = value[1];
+    setBeginX(value[0]);
+    setEndX(value[1]);
 
     xSlideBegin.setValue(value[0]);
     xSlideEnd.setValue(value[1]);
@@ -46,44 +50,50 @@ export default function Slider({
   const panResponderBegin = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (_evt, gestureState) => {
-      const newValue = validadeBegin(beginX, gestureState.dx, endX);
+      const newValue = getBeginValue(gestureState.dx);
 
       onChange([newValue, endX]);
 
       xSlideBegin.setValue(newValue);
     },
     onPanResponderRelease: (_evt, gestureState) => {
-      beginX += gestureState.dx;
+      setBeginX((prev) => prev + gestureState.dx);
     },
   });
 
   const panResponderEnd = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (_evt, gestureState) => {
-      const newValue = validadeEnd(beginX, gestureState.dx, endX);
+      const newValue = getEndValue(gestureState.dx);
 
       onChange([beginX, newValue]);
 
       xSlideEnd.setValue(newValue);
     },
     onPanResponderRelease: (_evt, gestureState) => {
-      endX += gestureState.dx;
+      setEndX((prev) => prev + gestureState.dx);
     },
   });
+
+  const containerSlides: any = [
+    styles.container,
+    {
+      height: heightBar,
+      top: (dotSize - heightBar) / 2,
+      borderRadius: heightBar / 2,
+    },
+  ];
+
+  if (typeof renderBar === 'function') {
+    containerSlides.push({ backgroundColor: 'transparent' });
+  }
 
   return (
     <>
       <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
-        <View
-          style={[
-            styles.container,
-            {
-              height: heightBar,
-              top: (dotSize - heightBar) / 2,
-              borderRadius: heightBar / 2,
-            },
-          ]}
-        />
+        <View style={containerSlides}>
+          {typeof renderBar === 'function' ? renderBar({ screenWidth }) : null}
+        </View>
 
         <Animated.View
           {...panResponderBegin.panHandlers}
@@ -119,8 +129,8 @@ export default function Slider({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    backgroundColor: 'gray',
     width: '100%',
+    backgroundColor: 'gray',
   },
   dot: {
     backgroundColor: 'white',

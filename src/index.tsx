@@ -1,3 +1,3 @@
-import RangeSlider from './Slider';
+import RangeSlider from './RangeSlider';
 
 export { RangeSlider };
