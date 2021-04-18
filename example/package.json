@@ -1,6 +1,6 @@
 {
-  "name": "react-native-rn-super-range-slider-example",
-  "description": "Example app for react-native-rn-super-range-slider",
+  "name": "react-native-super-range-slider-example",
+  "description": "Example app for react-native-super-range-slider",
   "version": "0.0.1",
   "private": true,
   "scripts": {

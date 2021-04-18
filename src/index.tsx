@@ -1,12 +1,3 @@
-import { requireNativeComponent, ViewStyle } from 'react-native';
+import RangeSlider from './Slider';
 
-type RnSuperRangeSliderProps = {
-  color: string;
-  style: ViewStyle;
-};
-
-export const RnSuperRangeSliderViewManager = requireNativeComponent<RnSuperRangeSliderProps>(
-'RnSuperRangeSliderView'
-);
-
-export default RnSuperRangeSliderViewManager;
+export { RangeSlider };

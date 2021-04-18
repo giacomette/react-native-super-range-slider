@@ -18,11 +18,11 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    compileSdkVersion safeExtGet('RnSuperRangeSlider_compileSdkVersion', 29)
-    buildToolsVersion safeExtGet('RnSuperRangeSlider_buildToolsVersion', '29.0.2')
+    compileSdkVersion safeExtGet('ReactNativeSuperRangeSlider_compileSdkVersion', 29)
+    buildToolsVersion safeExtGet('ReactNativeSuperRangeSlider_buildToolsVersion', '29.0.2')
     defaultConfig {
-        minSdkVersion safeExtGet('RnSuperRangeSlider_minSdkVersion', 16)
-        targetSdkVersion safeExtGet('RnSuperRangeSlider_targetSdkVersion', 29)
+        minSdkVersion safeExtGet('ReactNativeSuperRangeSlider_minSdkVersion', 16)
+        targetSdkVersion safeExtGet('ReactNativeSuperRangeSlider_targetSdkVersion', 29)
         versionCode 1
         versionName "1.0"
 

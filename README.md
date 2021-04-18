@@ -1,17 +1,17 @@
-# react-native-rn-super-range-slider
+# react-native-super-range-slider
 
 Range Slider
 
 ## Installation
 
 ```sh
-npm install react-native-rn-super-range-slider
+npm install react-native-super-range-slider
 ```
 
 ## Usage
 
 ```js
-import RnSuperRangeSlider from "react-native-rn-super-range-slider";
+import RnSuperRangeSlider from "react-native-super-range-slider";
 
 // ...
 

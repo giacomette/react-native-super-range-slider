@@ -1,25 +1,53 @@
 import * as React from 'react';
 
-import { StyleSheet, View } from 'react-native';
-import RnSuperRangeSliderViewManager from 'react-native-rn-super-range-slider';
+import { StyleSheet, TextInput, View } from 'react-native';
+import { RangeSlider } from 'react-native-super-range-slider';
 
 export default function App() {
+  const [value, setValue] = React.useState<number[]>([0, 50]);
+
   return (
     <View style={styles.container}>
-      <RnSuperRangeSliderViewManager color="#32a852" style={styles.box} />
+      <RangeSlider
+        value={value}
+        onChange={(v: number[]) => {
+          console.log('v', v);
+          setValue(v);
+        }}
+      />
+
+      <View style={styles.h} />
+
+      <TextInput
+        style={styles.input}
+        value={String(value[0])}
+        onChangeText={(text) => {
+          setValue([Number(text), value[1]]);
+        }}
+      />
+
+      <TextInput
+        style={styles.input}
+        value={String(value[1])}
+        onChangeText={(text) => {
+          setValue([value[0], Number(text)]);
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  input: {
+    backgroundColor: 'gray',
+    marginTop: 8,
+  },
+  h: {
+    height: 50,
+  },
   container: {
     flex: 1,
-    alignItems: 'center',
+    padding: 16,
     justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
   },
 });

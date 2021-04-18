@@ -1,4 +1,4 @@
-package com.reactnativernsuperrangeslider;
+package com.reactnativesuperrangeslider;
 
 import android.graphics.Color;
 import android.view.View;
@@ -9,8 +9,8 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class RnSuperRangeSliderViewManager extends SimpleViewManager<View> {
-    public static final String REACT_CLASS = "RnSuperRangeSliderView";
+public class ReactNativeSuperRangeSliderViewManager extends SimpleViewManager<View> {
+    public static final String REACT_CLASS = "ReactNativeSuperRangeSliderView";
 
     @Override
     @NonNull

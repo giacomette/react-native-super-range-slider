@@ -1,4 +1,4 @@
-package com.example.reactnativernsuperrangeslider;
+package com.example.reactnativesuperrangeslider;
 
 import com.facebook.react.ReactActivity;
 

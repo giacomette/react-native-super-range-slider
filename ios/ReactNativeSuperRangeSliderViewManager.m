@@ -1,11 +1,11 @@
 #import <React/RCTViewManager.h>
 
-@interface RnSuperRangeSliderViewManager : RCTViewManager
+@interface ReactNativeSuperRangeSliderViewManager : RCTViewManager
 @end
 
-@implementation RnSuperRangeSliderViewManager
+@implementation ReactNativeSuperRangeSliderViewManager
 
-RCT_EXPORT_MODULE(RnSuperRangeSliderView)
+RCT_EXPORT_MODULE(ReactNativeSuperRangeSliderView)
 
 - (UIView *)view
 {
