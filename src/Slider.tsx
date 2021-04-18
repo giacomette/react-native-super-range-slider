@@ -1,9 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Animated, PanResponder } from 'react-native';
 import { useRangeSlider } from './hooks';
 
-let width = 0;
 let beginX = 0;
 let endX = 0;
 
@@ -22,17 +20,19 @@ export default function Slider({
   onChange,
   step = 1,
   min = 0,
-  max = 10,
+  max = 100,
   heightBar = 10,
-  dotSize = 50,
+  dotSize = 35,
 }: SliderProps) {
   console.log(step, min, max);
+
+  const [screenWidth, setScreenWidth] = useState(0);
   const xSlideBegin = useRef(new Animated.Value(value[0])).current;
   const xSlideEnd = useRef(new Animated.Value(value[1])).current;
 
   const { validadeBegin, validadeEnd } = useRangeSlider({
     dotSize,
-    screenWidth: width,
+    screenWidth,
   });
 
   useEffect(() => {
@@ -73,21 +73,16 @@ export default function Slider({
 
   return (
     <>
-      <View
-        style={{
-          flexDirection: 'row',
-        }}
-        onLayout={(e) => (width = e.nativeEvent.layout.width)}
-      >
+      <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
         <View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'gray',
-            width: '100%',
-            height: heightBar,
-            top: (dotSize - heightBar) / 2,
-            borderRadius: heightBar / 2,
-          }}
+          style={[
+            styles.container,
+            {
+              height: heightBar,
+              top: (dotSize - heightBar) / 2,
+              borderRadius: heightBar / 2,
+            },
+          ]}
         />
 
         <Animated.View
@@ -107,7 +102,7 @@ export default function Slider({
           {...panResponderEnd.panHandlers}
           style={[
             styles.dot,
-            { backgroundColor: 'blue', position: 'absolute' },
+            styles.dotAbsolute,
             {
               transform: [{ translateX: xSlideEnd }],
               height: dotSize,
@@ -122,7 +117,20 @@ export default function Slider({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    backgroundColor: 'gray',
+    width: '100%',
+  },
   dot: {
-    backgroundColor: '#ff0000',
+    backgroundColor: 'white',
+    elevation: 3,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+  },
+  dotAbsolute: {
+    position: 'absolute',
   },
 });
