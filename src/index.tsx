@@ -1,3 +1,4 @@
 import RangeSlider from './RangeSlider';
+import Slider from './Slider';
 
-export { RangeSlider };
+export { RangeSlider, Slider };

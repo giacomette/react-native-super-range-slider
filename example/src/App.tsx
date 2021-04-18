@@ -1,21 +1,33 @@
 import * as React from 'react';
 
 import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
-import { RangeSlider } from 'react-native-super-range-slider';
+import { RangeSlider, Slider } from 'react-native-super-range-slider';
 
 const barImg = require('./assets/bar.png');
 
 export default function App() {
-  const [value, setValue] = React.useState<number[]>([0, 50]);
+  const [values, setValues] = React.useState<number[]>([0, 50]);
+  const [value, setValue] = React.useState<number>(0);
 
   return (
     <View style={styles.container}>
-      <Text>Basico</Text>
+      <Text>Simple</Text>
+
+      <Slider
+        value={value}
+        onChange={(v: number) => {
+          setValue(v);
+        }}
+      />
+
+      <View style={styles.h} />
+
+      <Text>Range</Text>
 
       <RangeSlider
-        value={value}
+        value={values}
         onChange={(v: number[]) => {
-          setValue(v);
+          setValues(v);
         }}
       />
 
@@ -24,9 +36,9 @@ export default function App() {
       <Text>Custon render bar</Text>
 
       <RangeSlider
-        value={value}
+        value={values}
         onChange={(v: number[]) => {
-          setValue(v);
+          setValues(v);
         }}
         renderBar={({ screenWidth }) => (
           <Image
@@ -44,17 +56,17 @@ export default function App() {
 
       <TextInput
         style={styles.input}
-        value={String(value[0])}
+        value={String(values[0])}
         onChangeText={(text) => {
-          setValue([Number(text), value[1]]);
+          setValues([Number(text), values[1]]);
         }}
       />
 
       <TextInput
         style={styles.input}
-        value={String(value[1])}
+        value={String(values[1])}
         onChangeText={(text) => {
-          setValue([value[0], Number(text)]);
+          setValues([values[0], Number(text)]);
         }}
       />
     </View>

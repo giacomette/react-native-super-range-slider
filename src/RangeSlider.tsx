@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Animated, PanResponder } from 'react-native';
+import ContainerBar from './components/Bar';
 import { useRangeSlider } from './hooks';
+import SliderDot from './components/Dot';
 
 interface RangeSliderProps {
   value: number[];
@@ -75,51 +77,23 @@ export default function RangeSlider({
     },
   });
 
-  const containerStyle: any[] = [
-    styles.container,
-    {
-      height: heightBar,
-      top: (dotSize - heightBar) / 2,
-      borderRadius: heightBar / 2,
-    },
-  ];
-
-  if (typeof renderBar === 'function') {
-    containerStyle.push({ backgroundColor: 'transparent' });
-  }
-
   return (
     <>
       <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
-        <View style={containerStyle}>
-          {typeof renderBar === 'function' ? renderBar({ screenWidth }) : null}
-        </View>
-
-        <Animated.View
-          {...panResponderBegin.panHandlers}
-          style={[
-            styles.dot,
-            {
-              transform: [{ translateX: xSlideBegin }],
-              height: dotSize,
-              width: dotSize,
-              borderRadius: dotSize / 2,
-            },
-          ]}
+        <ContainerBar
+          render={renderBar}
+          left={beginX}
+          screenWidth={screenWidth}
+          width={endX - beginX + dotSize}
+          dotSize={dotSize}
+          height={heightBar}
         />
 
-        <Animated.View
-          {...panResponderEnd.panHandlers}
-          style={[
-            styles.dot,
-            styles.dotAbsolute,
-            {
-              transform: [{ translateX: xSlideEnd }],
-              height: dotSize,
-              width: dotSize,
-              borderRadius: dotSize / 2,
-            },
-          ]}
+        <SliderDot translateX={xSlideBegin} panResponder={panResponderBegin} />
+        <SliderDot
+          translateX={xSlideEnd}
+          panResponder={panResponderEnd}
+          style={styles.dotAbsolute}
         />
       </View>
     </>
@@ -127,19 +101,6 @@ export default function RangeSlider({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    width: '100%',
-    backgroundColor: 'gray',
-  },
-  dot: {
-    backgroundColor: 'white',
-    elevation: 3,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-  },
   dotAbsolute: {
     position: 'absolute',
   },
