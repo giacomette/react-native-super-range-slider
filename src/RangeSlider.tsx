@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { StyleSheet, View, Animated, PanResponder } from 'react-native';
 import ContainerBar from './components/Bar';
 import { useRangeSlider } from './hooks';
 import SliderDot from './components/Dot';
 
 interface RangeSliderProps {
-  value: number[];
+  defaultValue: number[];
   onChange: (value: number[], x?: number, y?: number) => void;
   step?: number;
   min?: number;
@@ -15,8 +15,10 @@ interface RangeSliderProps {
   renderBar?: ({ screenWidth }: { screenWidth: number }) => JSX.Element;
 }
 
+let i = 0;
+
 export default function RangeSlider({
-  value,
+  defaultValue,
   onChange,
   step = 1,
   min = 0,
@@ -25,41 +27,51 @@ export default function RangeSlider({
   dotSize = 35,
   renderBar,
 }: RangeSliderProps) {
-  console.log(step, min, max);
+  i++;
+  const beginX = useRef(defaultValue[0]);
+  const endX = useRef(defaultValue[1]);
 
-  const [beginX, setBeginX] = useState(0);
-  const [endX, setEndX] = useState(0);
   const [screenWidth, setScreenWidth] = useState(0);
 
-  const xSlideBegin = useRef(new Animated.Value(value[0])).current;
-  const xSlideEnd = useRef(new Animated.Value(value[1])).current;
+  const xSlideBegin = useRef(new Animated.Value(defaultValue[0])).current;
+  const xSlideEnd = useRef(new Animated.Value(defaultValue[1])).current;
 
   const { getBeginValue, getEndValue } = useRangeSlider({
     dotSize,
     screenWidth,
-    beginX,
-    endX,
+    beginX: beginX.current,
+    endX: endX.current,
   });
 
-  useEffect(() => {
-    setBeginX(value[0]);
-    setEndX(value[1]);
-
-    xSlideBegin.setValue(value[0]);
-    xSlideEnd.setValue(value[1]);
-  }, [value, xSlideBegin, xSlideEnd]);
+  const fraction = useMemo(() => {
+    return screenWidth / (max - min);
+  }, [min, max, screenWidth]);
 
   const panResponderBegin = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (_evt, gestureState) => {
       const newValue = getBeginValue(gestureState.dx);
 
-      onChange([newValue, endX]);
+      const rest = newValue % step;
+
+      const half = step / 2;
+
+      let valueSteped: any = newValue + (newValue % step);
+
+      if (half <= rest) {
+        valueSteped = newValue - (newValue % step);
+      }
+
+      console.log('value', newValue);
+      console.log('valueSteped', valueSteped);
+      console.log('fraction', fraction);
+
+      beginX.current = newValue;
 
       xSlideBegin.setValue(newValue);
     },
-    onPanResponderRelease: (_evt, gestureState) => {
-      setBeginX((prev) => prev + gestureState.dx);
+    onPanResponderRelease: (_evt) => {
+      onChange([beginX.current, endX.current]);
     },
   });
 
@@ -68,23 +80,25 @@ export default function RangeSlider({
     onPanResponderMove: (_evt, gestureState) => {
       const newValue = getEndValue(gestureState.dx);
 
-      onChange([beginX, newValue]);
+      endX.current = newValue;
 
       xSlideEnd.setValue(newValue);
     },
-    onPanResponderRelease: (_evt, gestureState) => {
-      setEndX((prev) => prev + gestureState.dx);
+    onPanResponderRelease: (_evt) => {
+      onChange([beginX.current, endX.current]);
     },
   });
+
+  console.log('render', i);
 
   return (
     <>
       <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
         <ContainerBar
           render={renderBar}
-          left={beginX}
+          left={beginX.current}
           screenWidth={screenWidth}
-          width={endX - beginX + dotSize}
+          width={endX.current - beginX.current + dotSize}
           dotSize={dotSize}
           height={heightBar}
         />

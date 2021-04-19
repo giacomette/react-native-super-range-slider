@@ -25,7 +25,9 @@ export default function App() {
       <Text>Range</Text>
 
       <RangeSlider
-        value={values}
+        min={0}
+        max={160}
+        defaultValue={values}
         onChange={(v: number[]) => {
           setValues(v);
         }}
@@ -36,7 +38,9 @@ export default function App() {
       <Text>Custon render bar</Text>
 
       <RangeSlider
-        value={values}
+        min={0}
+        max={160}
+        defaultValue={values}
         onChange={(v: number[]) => {
           setValues(v);
         }}

@@ -32,6 +32,10 @@ export function useRangeSlider({
     (moveX) => {
       let newValue = validadeLimit(beginX + moveX);
 
+      if (!endX) {
+        return newValue;
+      }
+
       if (newValue + dotSize >= endX) {
         newValue = endX - dotSize;
       }
