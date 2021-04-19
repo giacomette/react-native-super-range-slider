@@ -131,8 +131,13 @@ export default function RangeSlider({
           height={heightBar}
         />
 
-        <SliderDot translateX={xSlideBegin} panResponder={panResponderBegin} />
         <SliderDot
+          size={dotSize}
+          translateX={xSlideBegin}
+          panResponder={panResponderBegin}
+        />
+        <SliderDot
+          size={dotSize}
           translateX={xSlideEnd}
           panResponder={panResponderEnd}
           style={styles.dotAbsolute}
