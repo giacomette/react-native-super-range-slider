@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View, Animated, PanResponder } from 'react-native';
 import ActiveLine from './components/ActiveLine';
 import SliderDot from './components/Dot';
-import { clamp, getValueForPosition } from './helpers';
+import { clamp, getPositionForValue, getValueForPosition } from './helpers';
 
 interface RangeSliderProps {
   defaultValue: number[];
@@ -27,14 +27,19 @@ export default function RangeSlider({
 }: RangeSliderProps) {
   const beginValueStep = useRef<number>(defaultValue[0]);
   const endValueStep = useRef(defaultValue[1]);
-
-  const [beginX, setBeginX] = useState(defaultValue[0]);
-  const [endX, setEndX] = useState(defaultValue[1]);
-
   const [screenWidth, setScreenWidth] = useState(0);
+
+  const [beginX, setBeginX] = useState(0);
+  const [endX, setEndX] = useState(0);
 
   const xSlideBegin = useRef(new Animated.Value(defaultValue[0])).current;
   const xSlideEnd = useRef(new Animated.Value(defaultValue[1])).current;
+
+  useEffect(() => {
+    setBeginX(getPositionForValue(defaultValue[0], screenWidth, max));
+    setEndX(getPositionForValue(defaultValue[1], screenWidth, max));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [max, screenWidth]);
 
   useEffect(() => {
     xSlideBegin.setValue(beginX);
@@ -82,7 +87,7 @@ export default function RangeSlider({
 
           endValueStep.current = getValueForPosition(
             value,
-            screenWidth,
+            screenWidth + dotSize,
             dotSize,
             min,
             max,
@@ -103,9 +108,9 @@ export default function RangeSlider({
       <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
         <ActiveLine
           render={renderBar}
-          left={beginX}
+          left={beginX + dotSize / 2}
           screenWidth={screenWidth}
-          width={endX - beginX + dotSize}
+          width={endX - beginX + dotSize / 2}
           dotSize={dotSize}
           height={heightBar}
         />

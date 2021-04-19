@@ -1,4 +1,4 @@
-export const clamp = (value: number, min: number, max: number) => {
+export const clamp = (value: number, min: number, max: number): number => {
   return Math.min(Math.max(value, min), max);
 };
 
@@ -9,7 +9,7 @@ export const getValueForPosition = (
   min: number,
   max: number,
   step: number
-) => {
+): number => {
   const availableSpace = containerWidth - thumbWidth;
   const relStepUnit = step / (max - min);
   let relPosition = (positionInView - thumbWidth / 2) / availableSpace;
@@ -19,4 +19,14 @@ export const getValueForPosition = (
     relPosition += relStepUnit;
   }
   return clamp(min + Math.round(relPosition / relStepUnit) * step, min, max);
+};
+
+export const getPositionForValue = (
+  value: number,
+  containerWidth: number,
+  max: number
+): number => {
+  const percent = value / max;
+
+  return percent * containerWidth;
 };
