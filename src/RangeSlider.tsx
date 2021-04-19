@@ -5,8 +5,8 @@ import SliderDot from './components/Dot';
 import { clamp, getPositionForValue, getValueForPosition } from './helpers';
 
 interface RangeSliderProps {
-  defaultValue: number[];
-  onChange: (value: number[], x?: number, y?: number) => void;
+  defaultValue?: number[];
+  onChange?: (value: number[], x?: number, y?: number) => void;
   step?: number;
   min?: number;
   max?: number;
@@ -25,19 +25,24 @@ export default function RangeSlider({
   dotSize = 35,
   renderBar,
 }: RangeSliderProps) {
-  const beginValueStep = useRef<number>(defaultValue[0]);
-  const endValueStep = useRef(defaultValue[1]);
+  const beginValueStep = useRef(0);
+  const endValueStep = useRef(0);
   const [screenWidth, setScreenWidth] = useState(0);
 
   const [beginX, setBeginX] = useState(0);
   const [endX, setEndX] = useState(0);
 
-  const xSlideBegin = useRef(new Animated.Value(defaultValue[0])).current;
-  const xSlideEnd = useRef(new Animated.Value(defaultValue[1])).current;
+  const xSlideBegin = useRef(new Animated.Value(0)).current;
+  const xSlideEnd = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    setBeginX(getPositionForValue(defaultValue[0], screenWidth, max));
-    setEndX(getPositionForValue(defaultValue[1], screenWidth, max));
+    if (defaultValue?.length) {
+      beginValueStep.current = defaultValue[0];
+      endValueStep.current = defaultValue[1];
+
+      setBeginX(getPositionForValue(defaultValue[0], screenWidth, max));
+      setEndX(getPositionForValue(defaultValue[1], screenWidth, max));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [max, screenWidth]);
 
@@ -68,7 +73,9 @@ export default function RangeSlider({
           setBeginX(value);
         },
         onPanResponderRelease: (_evt) => {
-          onChange([beginValueStep.current, endValueStep.current]);
+          if (typeof onChange === 'function') {
+            onChange([beginValueStep.current, endValueStep.current]);
+          }
         },
       }),
     [beginX, dotSize, endX, max, min, onChange, screenWidth, step]
@@ -97,7 +104,9 @@ export default function RangeSlider({
           setEndX(value);
         },
         onPanResponderRelease: (_evt) => {
-          onChange([beginValueStep.current, endValueStep.current]);
+          if (typeof onChange === 'function') {
+            onChange([beginValueStep.current, endValueStep.current]);
+          }
         },
       }),
     [beginX, dotSize, endX, max, min, onChange, screenWidth, step]
