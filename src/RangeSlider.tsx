@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Animated, PanResponder } from 'react-native';
 import ActiveLine from './components/ActiveLine';
 import SliderDot from './components/Dot';
@@ -47,77 +47,66 @@ export default function RangeSlider({
         max
       );
 
+      xSlideBegin.setValue(x1);
+      xSlideEnd.setValue(x2);
+
       setBeginX(x1);
       setEndX(x2);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [max, screenWidth]);
 
-  useEffect(() => {
-    xSlideBegin.setValue(beginX);
-  }, [beginX, xSlideBegin]);
+  const panResponderBegin = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (_evt, gestureState) => {
+      const temp = beginX + gestureState.dx >= 0 ? beginX + gestureState.dx : 0;
 
-  useEffect(() => {
-    xSlideEnd.setValue(endX);
-  }, [endX, xSlideEnd]);
+      const value = clamp(temp, 0, endX ?? screenWidth);
 
-  const panResponderBegin = useMemo(
-    () =>
-      PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: (_evt, gestureState) => {
-          const value = clamp(beginX + gestureState.dx, 0, endX ?? screenWidth);
+      xSlideBegin.setValue(value);
+      setBeginX(value);
 
-          beginValueStep.current = getValueForPosition(
-            value,
-            screenWidth,
-            dotSize,
-            min,
-            max,
-            step
-          );
+      beginValueStep.current = getValueForPosition(
+        temp,
+        screenWidth,
+        dotSize,
+        min,
+        max,
+        step
+      );
+    },
+    onPanResponderTerminate: (_evt) => {
+      if (typeof onChange === 'function') {
+        onChange([beginValueStep.current, endValueStep.current]);
+      }
+    },
+  });
 
-          setBeginX(value);
-        },
-        onPanResponderRelease: (_evt) => {
-          if (typeof onChange === 'function') {
-            onChange([beginValueStep.current, endValueStep.current]);
-          }
-        },
-      }),
-    [beginX, dotSize, endX, max, min, onChange, screenWidth, step]
-  );
+  const panResponderEnd = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (_evt, gestureState) => {
+      const temp = endX + gestureState.dx >= 0 ? endX + gestureState.dx : 0;
 
-  const panResponderEnd = useMemo(
-    () =>
-      PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: (_evt, gestureState) => {
-          const value = clamp(
-            endX + gestureState.dx,
-            beginX,
-            screenWidth - dotSize
-          );
+      const value = clamp(temp, beginX, screenWidth - dotSize);
 
-          endValueStep.current = getValueForPosition(
-            value,
-            screenWidth + dotSize,
-            dotSize,
-            min,
-            max,
-            step
-          );
+      xSlideEnd.setValue(value);
+      setEndX(value);
 
-          setEndX(value);
-        },
-        onPanResponderRelease: (_evt) => {
-          if (typeof onChange === 'function') {
-            onChange([beginValueStep.current, endValueStep.current]);
-          }
-        },
-      }),
-    [beginX, dotSize, endX, max, min, onChange, screenWidth, step]
-  );
+      endValueStep.current = getValueForPosition(
+        temp,
+        screenWidth,
+        dotSize,
+        min,
+        max,
+        step
+      );
+    },
+    onPanResponderTerminate: (_evt) => {
+      if (typeof onChange === 'function') {
+        onChange([beginValueStep.current, endValueStep.current]);
+      }
+    },
+  });
 
   return (
     <>
