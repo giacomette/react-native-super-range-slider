@@ -40,8 +40,15 @@ export default function RangeSlider({
       beginValueStep.current = defaultValue[0];
       endValueStep.current = defaultValue[1];
 
-      setBeginX(getPositionForValue(defaultValue[0], screenWidth, max));
-      setEndX(getPositionForValue(defaultValue[1], screenWidth, max));
+      const x1 = getPositionForValue(defaultValue[0], screenWidth, max);
+      const x2 = getPositionForValue(
+        defaultValue[1],
+        screenWidth - dotSize,
+        max
+      );
+
+      setBeginX(x1);
+      setEndX(x2);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [max, screenWidth]);
