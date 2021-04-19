@@ -20,9 +20,6 @@ interface SliderProps {
 export default function Slider({
   value,
   onChange,
-  step = 1,
-  min = 0,
-  max = 100,
   heightBar = 10,
   dotSize = 35,
   renderBar,
