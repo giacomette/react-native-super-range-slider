@@ -27,8 +27,10 @@ export default function App() {
       <RangeSlider
         min={0}
         max={160}
+        step={5}
         defaultValue={values}
         onChange={(v: number[]) => {
+          console.log('on change', v);
           setValues(v);
         }}
       />

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Animated, PanResponder } from 'react-native';
 
 import SliderDot from './components/Dot';
-import ContainerBar from './components/Bar';
+import ActiveLine from './components/ActiveLine';
 
 import { useSlider } from './hooks';
 
@@ -27,8 +27,6 @@ export default function Slider({
   dotSize = 35,
   renderBar,
 }: SliderProps) {
-  console.log(step, min, max);
-
   const [beginX, setBeginX] = useState(0);
   const [screenWidth, setScreenWidth] = useState(0);
 
@@ -63,7 +61,7 @@ export default function Slider({
   return (
     <>
       <View onLayout={(e) => setScreenWidth(e.nativeEvent.layout.width)}>
-        <ContainerBar
+        <ActiveLine
           render={renderBar}
           screenWidth={screenWidth}
           width={beginX}

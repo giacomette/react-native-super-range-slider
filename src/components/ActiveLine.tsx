@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-interface BarProps {
+interface ActiveLineProps {
   height?: number;
   dotSize?: number;
   left?: number;
@@ -10,14 +10,14 @@ interface BarProps {
   render?: ({ screenWidth }: { screenWidth: number }) => JSX.Element;
 }
 
-export default function Bar({
+export default function ActiveLine({
   height = 10,
   dotSize = 35,
   screenWidth,
   width,
   left = 0,
   render,
-}: BarProps) {
+}: ActiveLineProps) {
   const style: any[] = [
     styles.container,
     {

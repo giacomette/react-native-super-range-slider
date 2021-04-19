@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { clamp } from './helpers';
 
 export interface RangeSliderProps {
   endX?: number;
@@ -13,49 +14,30 @@ export function useRangeSlider({
   beginX,
   endX,
 }: RangeSliderProps) {
-  const validadeLimit = useCallback(
-    (x) => {
-      if (x <= 0) {
-        return 0;
-      }
-
-      if (x >= screenWidth - dotSize) {
-        return screenWidth - dotSize;
-      }
-
-      return x;
-    },
-    [dotSize, screenWidth]
-  );
-
   const getBeginValue = useCallback(
     (moveX) => {
-      let newValue = validadeLimit(beginX + moveX);
+      const newValue = clamp(beginX + moveX, 0, endX ?? screenWidth);
 
-      if (!endX) {
-        return newValue;
-      }
+      // if (!endX) {
+      //   return newValue;
+      // }
 
-      if (newValue + dotSize >= endX) {
-        newValue = endX - dotSize;
-      }
+      // if (newValue + dotSize >= endX) {
+      //   newValue = endX - dotSize;
+      // }
 
       return newValue;
     },
-    [beginX, dotSize, endX, validadeLimit]
+    [beginX, endX, screenWidth]
   );
 
   const getEndValue = useCallback(
     (moveX) => {
-      let newValue = validadeLimit(endX + moveX);
-
-      if (beginX + dotSize >= newValue) {
-        newValue = beginX + dotSize;
-      }
+      const newValue = clamp(endX + moveX, beginX, screenWidth - dotSize);
 
       return newValue;
     },
-    [beginX, dotSize, endX, validadeLimit]
+    [beginX, dotSize, endX, screenWidth]
   );
 
   return {
