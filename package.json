@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/giacomete/react-native-super-range-slider",
-  "author": "Roberto <roberto.giacomette18@gmail.com> (https://github.com/giacomete)",
+  "repository": "https://github.com/giacomette/react-native-super-range-slider",
+  "author": "Roberto <roberto.giacomette18@gmail.com> (https://github.com/giacomette)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/giacomete/react-native-super-range-slider/issues"
+    "url": "https://github.com/giacomette/react-native-super-range-slider/issues"
   },
-  "homepage": "https://github.com/giacomete/react-native-super-range-slider#readme",
+  "homepage": "https://github.com/giacomette/react-native-super-range-slider#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
