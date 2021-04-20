@@ -22,7 +22,9 @@ export default function App() {
 
       <View style={styles.h} />
 
-      <Text>Range</Text>
+      <Text>
+        Range: {values[0]} - {values[1]}
+      </Text>
 
       <RangeSlider
         min={0}

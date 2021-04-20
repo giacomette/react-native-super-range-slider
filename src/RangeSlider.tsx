@@ -75,7 +75,7 @@ export default function RangeSlider({
         step
       );
     },
-    onPanResponderTerminate: (_evt) => {
+    onPanResponderEnd: (_evt) => {
       if (typeof onChange === 'function') {
         onChange([beginValueStep.current, endValueStep.current]);
       }
@@ -101,10 +101,12 @@ export default function RangeSlider({
         step
       );
     },
-    onPanResponderTerminate: (_evt) => {
+    onPanResponderEnd: (_evt) => {
       if (typeof onChange === 'function') {
         onChange([beginValueStep.current, endValueStep.current]);
       }
+
+      return true;
     },
   });
 
